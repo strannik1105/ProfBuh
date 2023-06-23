@@ -1,7 +1,7 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-from settings import TOKEN, MAIL
+from config import TOKEN, MAIL
 
 def createConnection():
     connection = smtplib.SMTP_SSL('smtp.mail.ru: 465')
