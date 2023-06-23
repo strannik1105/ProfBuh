@@ -1,0 +1,6 @@
+RABBIT_INPUT_QUEUE = "queue"
+RABBIT_OUTPUT_EXCHANGE = "exchange"
+RABBIT_OUTPUT_QUEUE = "queue"
+RABBIT_EXCHANGE_TYPE = "topic"
+RABBIT_ADDRESS = "rabbitmq"
+RABBIT_CREDS = ("guest", "guest")
