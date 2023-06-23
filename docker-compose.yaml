@@ -1,0 +1,114 @@
+version: '3.4'
+
+volumes:
+  postgres-data:
+  minio-data:
+
+networks:
+  net:
+
+services:
+
+  # PostgresSQL
+  postgresql:
+    container_name: postgresql
+    hostname: postgresql
+    image: postgres:14.3
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+    env_file: .env.local
+    ports:
+      - "5432:5432"
+    networks:
+      - net
+
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3.10.7-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2023-06-19T19-52-50Z
+    command: server --console-address ":9001" http://minio{1...4}/data{1...2}
+    expose:
+      - "9000"
+      - "9001"
+    env_file:
+      - .env.local
+      # environment:
+      # MINIO_ROOT_USER: minioadmin
+      # MINIO_ROOT_PASSWORD: minioadmin
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    hostname: minio
+    volumes:
+      - minio-data:/minio-data
+    networks:
+      - net
+
+  backend:
+    hostname: backend
+    build:
+      context: Backend
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8082"
+    restart: always
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    networks:
+      - net
+    depends_on:
+      - postgresql
+
+  googleapi_worker:
+    hostname: googleapi_worker
+    build:
+      context: GoogleAPI_Worker
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - .:/code
+    networks:
+      - net
+    depends_on:
+      - postgresql
+      - backend
+
+  mlmodel_worker:
+    hostname: mlmodel_worker
+    build:
+      context: MLmodel_Worker
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - .:/code
+    networks:
+      - net
+    depends_on:
+      - postgresql
+      - backend
+
+  response_worker:
+    hostname: response_worker
+    build:
+      context: Response_Worker
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - .:/code
+    networks:
+      - net
+    depends_on:
+      - postgresql
+      - backend
