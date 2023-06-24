@@ -2,7 +2,8 @@ import json
 import os
 
 import yt_dlp
-
+from moviepy.video.io.VideoFileClip import VideoFileClip
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from article_process_model import GetArticleWithGPT
 from subtitle_model import GetSubtitles
 
@@ -19,11 +20,28 @@ def download_video(video_url: str):
     try:
         with yt_dlp.YoutubeDL(yt_opts) as ydl:
             ydl.download([video_url])
-        file = filename + '.mp4'
+        file = check_size_video(filename)
         return file
 
     except:
         return 'PIZDA'
+
+
+def check_size_video(filename):
+    list_video = []
+    clip = VideoFileClip(filename + '.mp4')
+    duration = clip.duration
+    if duration > 420:
+        t1 = 0
+        j = 1
+        for i in range(420, int(duration), 420):
+            ffmpeg_extract_subclip(filename + '.mp4', t1, i, targetname=f"{filename}{j}.mp4")
+            list_video.append(f"{filename}{j}.mp4")
+            t1 = i
+            j += 1
+    else:
+        list_video.append(f"{filename}.mp4")
+    return list_video
 
 
 # собирает json из субтитров с тайм кодами и текста с абзацами из гпт
@@ -31,7 +49,7 @@ def get_two_text(url: str):
     # скачивает видео по ссылке и передает название файла
     downloader = download_video(url)
     # текст с абзацами из гпт
-    dict_from_gpt = GetArticleWithGPT(downloader).enumerate()
+    #dict_from_gpt = GetArticleWithGPT(downloader).enumerate()
     # субтитры с тайм кодами
     dict_from_audio = GetSubtitles(downloader).convert_to_dict()
     output_file = url[url.rfind('=') + 1:]
@@ -74,5 +92,5 @@ def output_json(text1: dict, filename: str) -> None:
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(text1, f, ensure_ascii=False, indent=4)
 
-get_two_text('https://www.youtube.com/watch?v=ltKGr-8YrU4')
+get_two_text('https://www.youtube.com/watch?v=0K_eZGS5NsU')
 # download_audio('https://www.youtube.com/watch?v=ltKGr-8YrU4')
