@@ -10,4 +10,9 @@ class VideoInfo(models.Model):
     screenshot_delay = models.IntegerField()
 
     def __str__(self):
-        return f'json_name: {self.json_name}, ' \
+        return f'Url: {self.url}, ' \
+               f'start_video: {self.start_video}, '\
+               f'end_video: {self.end_video}, '\
+               f'length: {self.length_of_annotation}, '\
+               f'screenshot delay: {self.screenshot_delay}'
+

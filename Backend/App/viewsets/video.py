@@ -14,11 +14,11 @@ class VideoView(generics.CreateAPIView):
     serializer_class = VideoSerializer
 
     def perform_create(self, serializer):
-        url = self.request.POST['url']
-        start_video = self.request.POST['start_video']
-        end_video = self.request.POST['end_video']
-        length = self.request.POST['length_of_annotation']
-        screenshot_delay = self.request.POST['screenshot_delay']
+        url = self.request.POST["url"]
+        start_video = self.request.POST["start_video"]
+        end_video = self.request.POST["end_video"]
+        length = self.request.POST["length_of_annotation"]
+        screenshot_delay = self.request.POST["screenshot_delay"]
         serializer.save(url=url)
         serializer.save(start_video=start_video)
         serializer.save(end_video=end_video)
