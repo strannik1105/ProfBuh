@@ -123,3 +123,10 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+RABBIT_INPUT_QUEUE = "queue"
+RABBIT_OUTPUT_EXCHANGE = "exchange"
+RABBIT_OUTPUT_QUEUE = "queue"
+RABBIT_EXCHANGE_TYPE = "topic"
+RABBIT_ADDRESS = "rabbitmq"
+RABBIT_CREDS = ("guest", "guest")
