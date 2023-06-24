@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-d!$*7ifi1p0-2&v4a2298x&255z8imr7kp2@2r7r&&+l__o+3i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "App",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -121,3 +123,10 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+RABBIT_INPUT_QUEUE = "queue"
+RABBIT_OUTPUT_EXCHANGE = "exchange"
+RABBIT_OUTPUT_QUEUE = "queue"
+RABBIT_EXCHANGE_TYPE = "topic"
+RABBIT_ADDRESS = ("rabbitmq", 5672)
+RABBIT_CREDS = ("guest", "guest")
