@@ -1,13 +1,19 @@
 import vk_api
-from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from config import VK_TOKEN
 
-vk_bot = vk_api.VkApi(token=VK_TOKEN)
-session_bot = vk_bot.get_api()
-longpoll = VkBotLongPoll(vk_bot, 214053144)
+
+class VkSender:
+    def __init__(self):
+        self.vk_bot = vk_api.VkApi(token=VK_TOKEN)
+        self.bot = self.vk_bot.get_api()
+
+    def send_message(self, user_id):
+        user_full_id = self.bot.users.get(user_ids=user_id)[0]['id']
+        self.bot.messages.send(peer_id=user_full_id, random_id=0, message="Спасибо, что используете наш сервис!\n"
+                               "Как будет готова статья, мы отправим вам ссылку!")
 
 
-for event in longpoll.listen():
-    if event.type == VkBotEventType.MESSAGE_NEW:
-        peer = event.object.from_id
-        user_id = event.object.message["from_id"]
+    def send_article(self, user_id, URL):
+        user_full_id = self.bot.users.get(user_ids=user_id)[0]['id']
+        self.bot.messages.send(peer_id=user_full_id, random_id=0, message="Статья готова!\n"
+                                                                          f"Ссылка на статью: {URL}")
