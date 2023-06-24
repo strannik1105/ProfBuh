@@ -10,13 +10,13 @@ class MailSender:
         connection.login(MAIL, TOKEN)
         return connection
 
-    def send_message(self, mailTo, link):
+    def send_message(self, user_mail, URL):
         server = self.__create_connection()
         msg = MIMEMultipart()
         msg['From'] = MAIL
-        msg['To'] = mailTo
+        msg['To'] = user_mail
         msg['Subject'] = "Твоя статья готова!"
-        message = f"Статья сформированна!\nСкачать ее можно по ссылке: {link}"
+        message = f"Статья сформированна!\nСкачать ее можно по ссылке: {URL}"
         msg.attach(MIMEText(message, 'plain'))
         server.sendmail(msg['From'], msg['To'], msg.as_string())
         server.quit()
