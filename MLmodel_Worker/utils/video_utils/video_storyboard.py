@@ -15,7 +15,7 @@ def video_storyboard(video):
     step = 1 / video_clip.fps if saving_frames_per_second == 0 else 1 / saving_frames_per_second
     counter = 1
     for current_duration in np.arange(0, video_clip.duration, step):
-        frame_filename = os.path.join(filename, f"{video.path}-frame{counter}.jpg")
+        frame_filename = os.path.join(filename, f"{video.video_id}-frame{counter}.jpg")
         video_clip.save_frame(frame_filename, current_duration)
         counter += 1
     # скрины сохраняются в папку, где находится видео
