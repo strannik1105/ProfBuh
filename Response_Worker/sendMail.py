@@ -1,13 +1,13 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-from config import TOKEN, MAIL
+from config import MAIL_TOKEN, MAIL
 
 
 class MailSender:
     def __create_connection(self):
         connection = smtplib.SMTP_SSL('smtp.mail.ru: 465')
-        connection.login(MAIL, TOKEN)
+        connection.login(MAIL, MAIL_TOKEN)
         return connection
 
     def send_message(self, user_mail, URL):
@@ -20,4 +20,3 @@ class MailSender:
         msg.attach(MIMEText(message, 'plain'))
         server.sendmail(msg['From'], msg['To'], msg.as_string())
         server.quit()
-        return True

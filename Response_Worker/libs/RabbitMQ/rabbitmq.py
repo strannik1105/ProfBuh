@@ -4,7 +4,7 @@ from threading import Thread
 from pika import PlainCredentials, ConnectionParameters, BlockingConnection
 from pika.adapters.blocking_connection import BlockingChannel
 
-from settings import (
+from config import (
     RABBIT_INPUT_QUEUE,
     RABBIT_OUTPUT_EXCHANGE,
     RABBIT_OUTPUT_QUEUE,
