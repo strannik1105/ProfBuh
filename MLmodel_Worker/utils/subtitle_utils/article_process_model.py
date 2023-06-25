@@ -12,8 +12,10 @@ class GetArticleWithGPT:
             model='whisper-1',
             file=open(self.file, 'rb')
         )
-        str = 'Разбей на абзацы  ' + result['text']
+        str = result['text'].replace('.', '')
         print(str)
+        with open('file.txt', 'w') as f:
+            f.write(str)
         return str
 
     def generate_gpt3_response(self, print_output=False):

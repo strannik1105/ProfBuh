@@ -3,9 +3,11 @@ import json
 import requests
 import openai
 
+from model import arcticle_model
+
 
 class GetSubtitles:
-    openai.api_key = "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"
+    openai.api_key = "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"
 
     def __init__(self, filename: list):
         self.filename = filename
@@ -29,22 +31,28 @@ class GetSubtitles:
             }
             response = requests.post(url, headers=headers, data=data, files=files)
             result.append(response.text.split('\n'))
-        print(result)
+        #print(result)
         return result
 
     # перебираем список и делим его на части  [[1, 'timestamp' ,'text'], [2, 'timestamp' ,'text']], ...
     def subtitle_division(self, lst: list, n: int = 4):
         result = []
         k = 0
+        text = ''
+        get_name_text_file = self.filename[0][:-5]
         for i in lst:
             for j in range(0, len(i) - 2, n):
                 sub = i[j: n + j - 1]
                 sub[1] = sub[1]
-
+                text += sub[2]
                 if len(sub) < n:
                     sub = sub + [None for y in range(n - len(sub) - 1)]
                 result.append(sub)
-        print(result)
+
+        # сохраняет только текст субтитров для обработки на абзацы
+        with open(f'{get_name_text_file}.txt', 'w') as f:
+            f.write(text)
+        #print(result)
         return result
 
     # из списка субтитров делаем словарь, где ключ - номер субтитра, значение - timestamp и text
@@ -55,11 +63,7 @@ class GetSubtitles:
         dct_json = {}
         j = 0
         for i, val in enumerate(list_val):
-            dct_json[j] = val[1], val[2]
+            dct_json[j] = val[1][:11], val[2]
             j += 1
-        print(dct_json)
-        with open('file_text.json', 'w', encoding='utf-8') as f:
-            json.dump(dct_json, f, ensure_ascii=False, indent=4)
+        #print(dct_json)
         return dct_json
-
-
