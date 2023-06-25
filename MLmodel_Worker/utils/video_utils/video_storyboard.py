@@ -2,8 +2,10 @@ from moviepy.editor import VideoFileClip
 import numpy as np
 import os
 
+from ProfBuh.MLmodel_Worker.utils.video_utils.video_model import Video
 
-def video_storyboard(video):
+
+def video_storyboard(video: Video):
     video_clip = VideoFileClip(video.path)
 
     filename, _ = os.path.splitext(video.path)

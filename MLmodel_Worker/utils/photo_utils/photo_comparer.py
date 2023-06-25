@@ -1,8 +1,10 @@
 from PIL import Image
 from imgcompare import image_diff_percent
 
+from ProfBuh.MLmodel_Worker.utils.photo_utils.photo_model import Photo
 
-def compare(img_1, img_2):
+
+def compare(img_1: Photo, img_2: Photo):
     image_1 = Image.open(img_1.path)
     image_2 = Image.open(img_2.path)
     img_1_resized = image_1.resize((400, 300))
