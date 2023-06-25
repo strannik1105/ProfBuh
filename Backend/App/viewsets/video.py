@@ -20,12 +20,14 @@ class VideoView(generics.CreateAPIView):
         end_video = self.request.POST["end_video"]
         length_of_annotation = self.request.POST["length_of_annotation"]
         screenshot_delay = self.request.POST["screenshot_delay"]
+        contact = self.request.POST["contact"]
         video = serializer.create({
             'url': url,
             'start_video': start_video,
             'end_video': end_video,
             'length_of_annotation': length_of_annotation,
             'screenshot_delay': screenshot_delay,
+            'contact': contact
         })
         serializer.save()
         rabbitmq.send_message(routing_key="mlmodel.input_data", message=str(video))

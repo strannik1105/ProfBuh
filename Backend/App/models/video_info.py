@@ -8,12 +8,16 @@ class VideoInfo(models.Model):
     end_video = models.TextField(max_length=8)
     length_of_annotation = models.IntegerField()
     screenshot_delay = models.IntegerField()
+    contact = models.TextField(max_length=2)
+    # tg или vk
 
     def __str__(self):
-        return (
-            f"Url: {self.url}, "
-            f"start_video: {self.start_video}, "
-            f"end_video: {self.end_video}, "
-            f"length: {self.length_of_annotation}, "
-            f"screenshot delay: {self.screenshot_delay}"
-        )
+        payload = {
+            'utl': self.url,
+            'start_video': self.start_video,
+            'end_video': self.end_video,
+            'length_of_annotation': self.length_of_annotation,
+            'screenshot_delay': self.screenshot_delay,
+            'contact': self.contact
+        }
+        return str(payload)
