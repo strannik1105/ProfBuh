@@ -20,3 +20,4 @@ class MailSender:
         msg.attach(MIMEText(message, 'plain'))
         server.sendmail(msg['From'], msg['To'], msg.as_string())
         server.quit()
+
